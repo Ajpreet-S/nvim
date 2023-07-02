@@ -16,3 +16,6 @@ syntax on
 let mapleader="\<space>"
 inoremap jk <esc>
 nnoremap <leader>ex :Ex<cr>
+
+" Show at least 5 lines above or below when scrolling
+set scrolloff=5
