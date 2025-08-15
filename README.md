@@ -2,22 +2,27 @@
 
 Personal Neovim configuration (Vimscript).
 
-## Install
+## Install (Linux)
 
-If you already have a Neovim config, you may want to back it up first.
-
-Linux/macOS:
 ```bash
 mkdir -p ~/.config/nvim
-git clone https://github.com/<your-username>/<this-repo> ~/.config/nvim
+# Optional: back up any existing config first
+# cp -r ~/.config/nvim ~/.config/nvim.bak
+
+# Install vim-plug
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# Start Neovim and install plugins
+nvim +PlugInstall +qall
 ```
 
-Start Neovim: `nvim`
+## Plugins
+- `tpope/vim-surround`: add/change/delete surroundings quickly.
+- `nvim-telescope/telescope.nvim` + `nvim-lua/plenary.nvim`: fuzzy finder.
 
-## Where Does Neovim Look For Config?
+Dependencies (Linux)
+- `ripgrep` for `:Telescope live_grep` (e.g., `sudo apt install ripgrep`).
 
-- In Neovim: `:echo stdpath('config')`
-- Typical paths:
-  - Linux/macOS: `~/.config/nvim`
-
-This repo expects `init.vim` at the root of your config directory (the path above).
+## Usage
+- Leader is Space: `<leader>ff` files, `<leader>fg` grep, `<leader>fb` buffers, `<leader>fh` help.
+- Surround basics: `ys{motion}{char}` add, `ds{char}` delete, `cs{from}{to}` change.

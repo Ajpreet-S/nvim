@@ -42,7 +42,7 @@ nnoremap <leader>o o<esc>          " new line below without entering insert
 nnoremap <leader>O O<esc>          " new line above without entering insert
 nnoremap <leader>noh :noh<cr>      " clear search highlight
 nnoremap <leader>! :! 
-set scrolloff=7     " keep 5 lines visible above/below cursor when scrolling
+set scrolloff=7     " keep 7 lines visible above/below cursor when scrolling
 
 " --- QoL: Search ---
 set ignorecase      " case-insensitive search by default
@@ -66,3 +66,31 @@ set undofile        " keep undo history across sessions
 " --- QoL: Indentation helpers ---
 set smartindent     " basic autoindent for common languages
 filetype plugin indent on " enable filetype detection, plugins, indentation
+
+" --- Plugins ---
+" Plugin manager: vim-plug
+" Install instructions are in README; once plug.vim is installed, run :PlugInstall
+
+" Begin plugin section (installs to stdpath('data')/plugged)
+call plug#begin(stdpath('data') . '/plugged')
+
+" Essential: quick add/change/delete surroundings like quotes/brackets
+Plug 'tpope/vim-surround'
+
+" Telescope fuzzy finder and dependency
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+call plug#end()
+
+" --- Plugin configuration ---
+lua << EOF
+require('telescope').setup({})
+EOF
+
+" --- Plugin keymaps ---
+" Telescope: quick access to common pickers
+nnoremap <leader>ff :Telescope find_files<cr>
+nnoremap <leader>fg :Telescope live_grep<cr>
+nnoremap <leader>fb :Telescope buffers<cr>
+nnoremap <leader>fh :Telescope help_tags<cr>
