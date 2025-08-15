@@ -3,7 +3,6 @@
 "
 " Philosophy / Intent:
 " - Prefer readability and calm defaults over heavy customization.
-" - 100-column soft guide, 4-space indents, no soft-wrap for code.
 " - Relative numbers for motion efficiency; system clipboard on by default.
 " - Minimal mappings that aid navigation, windows, and buffers.
 
@@ -18,10 +17,9 @@ set nowrap          " don't wrap long lines
 set softtabstop=4   " spaces when pressing <Tab> in insert mode
 set shiftwidth=4    " spaces used for << and >> and autoindent
 set tabstop=4       " how many spaces a literal <Tab> counts for
-set expandtab       " insert spaces instead of <Tab> characters
 
-" Soft ruler to guide line length (column 100)
-set cc=100          " draw a colorcolumn at 100
+" Soft ruler to guide line length
+set cc=120          " draw a colorcolumn at 120
 
 syntax on           " enable syntax highlighting
 
@@ -43,24 +41,8 @@ nnoremap <leader>sv :source %<cr>  " source current file
 nnoremap <leader>o o<esc>          " new line below without entering insert
 nnoremap <leader>O O<esc>          " new line above without entering insert
 nnoremap <leader>noh :noh<cr>      " clear search highlight
-nnoremap <leader>! :!              " run a shell command
-
-" Normal mode — Windows
-nnoremap <C-h> <C-w>h              " move to left window
-nnoremap <C-j> <C-w>j              " move to window below
-nnoremap <C-k> <C-w>k              " move to window above
-nnoremap <C-l> <C-w>l              " move to right window
-nnoremap <leader>= <C-w>=          " equalize window sizes
-
-" Normal mode — Buffers
-nnoremap <leader>bn :bnext<cr>     " next buffer
-nnoremap <leader>bp :bprevious<cr> " previous buffer
-nnoremap <leader>bd :bdelete<cr>   " delete current buffer
-
-
-set scrolloff=5     " keep 5 lines visible above/below cursor when scrolling
-
-set noswapfile      " avoid swap files (pair with undofile below)
+nnoremap <leader>! :! 
+set scrolloff=7     " keep 5 lines visible above/below cursor when scrolling
 
 " --- QoL: Search ---
 set ignorecase      " case-insensitive search by default
@@ -71,14 +53,13 @@ set hlsearch        " highlight all search matches
 " --- QoL: UI ---
 set signcolumn=yes  " always show signcolumn to prevent text shifting
 set termguicolors   " enable 24-bit color support
-set splitright      " vsplit opens to the right
-set splitbelow      " hsplit opens below
 
 " --- QoL: Clipboard and mouse ---
 set clipboard=unnamedplus " use system clipboard for all yank/paste
 set mouse=a               " enable mouse in all modes
 
 " --- QoL: Persistent undo ---
+set noswapfile      " avoid swap files (pair with undofile)
 set undofile        " keep undo history across sessions
 " set undodir=~/.local/share/nvim/undo " custom location for undo files
 

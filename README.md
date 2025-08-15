@@ -1,10 +1,10 @@
 # Neovim Config (init.vim)
 
-Personal Neovim configuration (Vimscript). It focuses on readable defaults, 100‑column guide, 4‑space indents, sensible search/UI tweaks, and a handful of ergonomic mappings.
+Personal Neovim configuration (Vimscript).
 
 ## Install
 
-If you already have a Neovim config, back it up first.
+If you already have a Neovim config, you may want to back it up first.
 
 Linux/macOS:
 ```bash
@@ -19,6 +19,5 @@ Start Neovim: `nvim`
 - In Neovim: `:echo stdpath('config')`
 - Typical paths:
   - Linux/macOS: `~/.config/nvim`
-  - Windows: `%LOCALAPPDATA%\nvim` (usually `C:\\Users\\<you>\\AppData\\Local\\nvim`)
 
 This repo expects `init.vim` at the root of your config directory (the path above).
