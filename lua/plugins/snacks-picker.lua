@@ -22,7 +22,7 @@ return {
     keys = {
         { "<leader>a", function() Snacks.picker.pick("all") end, desc = "Search All", mode = "n" },
         { "<leader>f", function() Snacks.picker.pick("all", { search_mode = "files" }) end, desc = "Search Files", mode = "n" },
-        { "<leader>g", function() Snacks.picker.pick("all", { search_mode = "text" }) end, desc = "Search Text", mode = "n" },
+        { "<leader>t", function() Snacks.picker.pick("all", { search_mode = "text" }) end, desc = "Search Text", mode = "n" },
     },
     opts = {
         picker = {
