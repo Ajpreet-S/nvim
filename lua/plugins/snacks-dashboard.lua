@@ -84,8 +84,23 @@ local dashboard = {
     width = 50,
     preset = {
         keys = {
+            {
+                icon = " ", key = "p", desc = "Projects",
+                action = function()
+                    Snacks.picker.select(require("config.projects"), {
+                        prompt = "Projects",
+                        snacks = {
+                            layout = { preset = "select", layout = { row = 0.15 } },
+                        },
+                    }, function(path)
+                        if path then
+                            vim.fn.chdir(vim.fn.expand(path))
+                            Snacks.picker.files()
+                        end
+                    end)
+                end,
+            },
             { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-            { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
             { icon = " ", key = "q", desc = "Quit", action = ":qa" },
         }
     },
