@@ -1,5 +1,5 @@
 local rare_prefix = "."
-local rare_skip_chance = 0.75 -- 0 = always include rare splashes; 1 = always exclude.
+local rare_skip_chance = 0.5 -- 0 = always include rare splashes; 1 = always exclude.
 
 math.randomseed(vim.uv.hrtime())
 local include_rare = math.random() >= rare_skip_chance
