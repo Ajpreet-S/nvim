@@ -1,14 +1,20 @@
+local rare_prefix = "."
+local rare_skip_chance = 0.75 -- 0 = always include rare splashes; 1 = always exclude.
+
+math.randomseed(vim.uv.hrtime())
+local include_rare = math.random() >= rare_skip_chance
 local splash_file = vim.fn.stdpath("config") .. "/snacks-dashboard-splashes.txt"
 local splashes = {}
 local readable, lines = pcall(vim.fn.readfile, splash_file)
 if readable then
     for _, line in ipairs(lines) do
-        if line:find("%S") then
+        local rare = line:sub(1, #rare_prefix) == rare_prefix
+        line = rare and line:sub(#rare_prefix + 1) or line
+        if line:find("%S") and not line:match("^%s*%-%-") and (not rare or include_rare) then
             splashes[#splashes + 1] = line:gsub("\\n", "\n")
         end
     end
 end
-math.randomseed(vim.uv.hrtime())
 local splash = #splashes > 0 and splashes[math.random(#splashes)] or nil
 local attribution
 if splash then

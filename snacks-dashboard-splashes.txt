@@ -1,2 +1,6 @@
-In nomine Patris, et Filii, et Spiritus Sancti | Venator
+-- One random splash per launch; one entry per line. Blank lines and -- comments are ignored.
+-- Use \n for line breaks and " | Author" for attribution. Prefix with . for a rare splash.
+-- rare_skip_chance in lua/plugins/snacks-dashboard.lua controls the chance of excluding all rare splashes.
+.In nomine Patris, et Filii, et Spiritus Sancti | Venator
+.I WANNA PLAY WITH RABIES RONNIE!!! | Rem
 Hello World!
