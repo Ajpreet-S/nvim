@@ -44,50 +44,37 @@ local function animate_splash()
     end
     local buffer = vim.api.nvim_get_current_buf()
     local length = vim.fn.strchars(splash)
-    local timer = assert(vim.uv.new_timer())
-    local stopped = false
-    local cleanup
-
-    local function stop()
-        if stopped then
-            return
-        end
-        stopped = true
-        timer:stop()
-        timer:close()
-        vim.api.nvim_del_autocmd(cleanup)
+    revealed = 0
+    if length == 0 or not Snacks.animate.enabled({ buf = buffer }) then
         revealed = length
+        Snacks.dashboard.update()
+        return
     end
 
+    local cleanup
+    local animation = Snacks.animate(0, length, function(value, context)
+        revealed = value
+        if context.done then
+            vim.api.nvim_del_autocmd(cleanup)
+        end
+        Snacks.dashboard.update()
+    end, {
+        buf = buffer,
+        duration = 20,
+        easing = "inOutSine",
+        int = true,
+    })
     cleanup = vim.api.nvim_create_autocmd({ "BufLeave", "BufWipeout", "VimLeavePre" }, {
         buffer = buffer,
+        once = true,
         callback = function(event)
-            stop()
+            animation:stop()
+            revealed = length
             if event.event == "BufLeave" then
                 Snacks.dashboard.update()
             end
         end,
     })
-    revealed = 0
-    local type_character
-    type_character = vim.schedule_wrap(function()
-        if stopped then
-            return
-        end
-        if not vim.api.nvim_buf_is_valid(buffer) or vim.api.nvim_get_current_buf() ~= buffer then
-            stop()
-            return
-        end
-        revealed = revealed + 1
-        Snacks.dashboard.update()
-        if revealed >= length then
-            stop()
-            return
-        end
-
-        timer:start(math.random(12, 28), 0, type_character)
-    end)
-    timer:start(0, 0, type_character)
 end
 
 
