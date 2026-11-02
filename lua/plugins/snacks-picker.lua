@@ -30,11 +30,11 @@ return {
     opts = {
         picker = {
             enabled = true,
+            prompt = "   ",
             sources = {
                 all = {
                     title = "All",
                     on_show = update_mode_title,
-                    prompt = "   ",
                     actions = {
                         next_search_mode = function(picker) cycle_search_mode(picker, 1) end,
                         previous_search_mode = function(picker) cycle_search_mode(picker, -1) end,
@@ -64,6 +64,7 @@ return {
                             result[#result + 1] = {
                                 virt_text = { { " " .. path .. " ", "SnacksPickerDir" } },
                                 virt_text_pos = "right_align",
+                                hl_mode = "combine",
                             }
                             return result
                         end
