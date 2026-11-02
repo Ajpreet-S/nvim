@@ -1,0 +1,34 @@
+-- Bootstrap lazy.nvim.
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Set leaders before loading plugins so their mappings use the right keys.
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
+require("lazy").setup({
+  spec = {
+    { import = "plugins" },
+    -- Omarchy's theme spec includes LazyVim only to select a colorscheme.
+    -- config.omarchy applies that setting without installing the distribution.
+    { "LazyVim/LazyVim", enabled = false },
+  },
+  install = { colorscheme = { "habamax" } },
+  checker = { enabled = true },
+  change_detection = { notify = false },
+})
+
+require("config.omarchy").setup()

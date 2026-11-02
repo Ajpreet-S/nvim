@@ -1,0 +1,1 @@
+-- Add your Neovim options here. Loaded before lazy.nvim.
