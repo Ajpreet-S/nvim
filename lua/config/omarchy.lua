@@ -1,17 +1,22 @@
 local M = {}
+local state = vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state")
+M.theme_file = state .. "/omarchy/current/theme/neovim.lua"
+
+function M.specs()
+  if vim.fn.filereadable(M.theme_file) == 0 then
+    return {}
+  end
+  return dofile(M.theme_file)
+end
 
 function M.apply()
-  local specs = dofile(vim.fn.stdpath("config") .. "/lua/plugins/theme.lua")
-  local colorscheme
+  local specs = M.specs()
+  local colorscheme = "habamax"
   for _, spec in ipairs(specs) do
     if spec[1] == "LazyVim/LazyVim" then
       colorscheme = spec.opts.colorscheme
     end
   end
-  if not colorscheme then
-    return
-  end
-
   vim.o.background = "dark"
 
   -- Reconfigure even an already-loaded plugin: two Omarchy themes can use
@@ -35,13 +40,29 @@ end
 function M.setup()
   vim.opt.termguicolors = true
   local group = vim.api.nvim_create_augroup("OmarchyTheme", { clear = true })
-  -- lazy.nvim watches the linked theme spec and reloads it when Omarchy changes it.
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "LazyReload",
     callback = M.apply,
   })
   M.apply()
+
+  if vim.fn.filereadable(M.theme_file) == 1 then
+    local watcher = assert(vim.uv.new_fs_poll())
+    watcher:start(M.theme_file, 1000, vim.schedule_wrap(function(err)
+      if not err then
+        -- Reload plugin options before LazyReload reapplies the colorscheme.
+        require("lazy.manage.reloader").reload({ { file = M.theme_file, what = "changed" } })
+      end
+    end))
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      group = group,
+      callback = function()
+        watcher:stop()
+        watcher:close()
+      end,
+    })
+  end
 end
 
 return M
