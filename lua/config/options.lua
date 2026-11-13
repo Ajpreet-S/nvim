@@ -1,5 +1,6 @@
 -- Add your Neovim options here. Loaded before lazy.nvim.
 
+vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.autoread = true
 

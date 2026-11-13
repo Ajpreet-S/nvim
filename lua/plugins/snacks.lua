@@ -5,4 +5,10 @@ return {
     },
     priority = 1000,
     lazy = false,
+    keys = {
+        { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+    },
+    opts = {
+        explorer = { enabled = true },
+    },
 }

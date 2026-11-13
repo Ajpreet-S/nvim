@@ -95,7 +95,7 @@ local dashboard = {
                     }, function(path)
                         if path then
                             vim.fn.chdir(vim.fn.expand(path))
-                            Snacks.picker.files()
+                            Snacks.explorer({ cwd = vim.fn.getcwd() })
                         end
                     end)
                 end,
