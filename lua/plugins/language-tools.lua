@@ -1,5 +1,12 @@
 return {
   {
+    "d2lang/d2-vim",
+    ft = "d2",
+    init = function()
+      vim.g.d2_fmt_autosave = 0 -- Keep formatting manual through Conform.
+    end,
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function()
       vim.lsp.config("lua_ls", {
@@ -66,6 +73,7 @@ return {
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
+        d2 = { "d2" },
         sh = { "shfmt" },
         bash = { "shfmt" },
         javascript = { "prettier" },

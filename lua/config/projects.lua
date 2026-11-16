@@ -2,5 +2,5 @@
 return {
     "~/Work/codebase",
     "~/Playground/CareerBoard",
-    "~/Playground/frontendPlayground",
+    "~/.pi",
 }
