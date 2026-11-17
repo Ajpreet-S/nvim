@@ -3,7 +3,7 @@ local rare_skip_chance = 0.5 -- 0 = always include rare splashes; 1 = always exc
 
 math.randomseed(vim.uv.hrtime())
 local include_rare = math.random() >= rare_skip_chance
-local splash_file = vim.fn.stdpath('config') .. '/snacks-dashboard-splashes.txt'
+local splash_file = vim.fn.stdpath('config') .. '/snacksDashboardSplashes.txt'
 local splashes = {}
 local readable, lines = pcall(vim.fn.readfile, splash_file)
 if readable then
