@@ -4,6 +4,9 @@
 - Keep editor tooling low-bloat: favor a small set of tools and plugins, learn them well, and avoid unnecessary tool overlap and the mental overhead of excessive choices.
 - Prefer/Recommend Neovim defaults and hand-rolled extensions/plugins/etc in order to not only keep bloat to a minimum, but to learn core Neovim fundamentals.
 
+## Lua style
+- Use single-quoted strings.
+
 ## Neovim Setup Context/Rules
 - `init.lua` is the config entry script
 - `lua/config/options.lua` sets all Vanilla Neovim options and the leader key

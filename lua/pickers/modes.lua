@@ -6,7 +6,7 @@ function M.get(modes, id)
             return mode, index
         end
     end
-    error("Unknown picker mode: " .. tostring(id))
+    error('Unknown picker mode: ' .. tostring(id))
 end
 
 function M.next(modes, current, direction)
@@ -16,11 +16,11 @@ end
 
 function M.update_title(picker, modes, current, title)
     local layout = vim.deepcopy(picker.resolved_layout)
-    layout.layout.title = title and { { title .. " ·", "FloatTitle" } } or {}
+    layout.layout.title = title and { { title .. ' ·', 'FloatTitle' } } or {}
     for index, mode in ipairs(modes) do
         layout.layout.title[#layout.layout.title + 1] = {
-            mode.label .. (index < #modes and " ·" or ""),
-            mode.id == current and "FloatTitle" or "Comment",
+            mode.label .. (index < #modes and ' ·' or ''),
+            mode.id == current and 'FloatTitle' or 'Comment',
         }
     end
     picker:set_layout(layout)

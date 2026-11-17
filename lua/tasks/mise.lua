@@ -1,20 +1,20 @@
-local M = { title = "Mise Tasks" }
+local M = { title = 'Mise Tasks' }
 
 -- Replace this argument prefix to use another external terminal launcher.
-local external_terminal = { "xdg-terminal-exec", "--hold", "--" }
+local external_terminal = { 'xdg-terminal-exec', '--hold', '--' }
 
 function M.run(task, cwd, mode)
-    local command = { "mise", "run", task.name }
+    local command = { 'mise', 'run', task.name }
     local options = { cwd = cwd, auto_close = false }
-    local terminal = Snacks.terminal.get(command, vim.tbl_extend("force", options, { create = false }))
+    local terminal = Snacks.terminal.get(command, vim.tbl_extend('force', options, { create = false }))
     if terminal then
         local job = vim.b[terminal.buf].terminal_job_id
         if vim.fn.jobwait({ job }, 0)[1] == -1 then
-            if mode == "background" then
+            if mode == 'background' then
                 terminal:hide()
             else
-                if mode == "external" then
-                    Snacks.notify.info("Task already running in Neovim; showing its terminal.", { title = M.title })
+                if mode == 'external' then
+                    Snacks.notify.info('Task already running in Neovim; showing its terminal.', { title = M.title })
                 end
                 terminal:show()
                 terminal:focus()
@@ -24,9 +24,9 @@ function M.run(task, cwd, mode)
         end
     end
 
-    if mode == "external" then
+    if mode == 'external' then
         if vim.fn.executable(external_terminal[1]) == 0 then
-            Snacks.notify.warn("Configure an available external terminal launcher in lua/tasks/mise.lua.", { title = M.title })
+            Snacks.notify.warn('Configure an available external terminal launcher in lua/tasks/mise.lua.', { title = M.title })
             return
         end
         local arguments = vim.list_extend(vim.deepcopy(external_terminal), command)
@@ -35,12 +35,12 @@ function M.run(task, cwd, mode)
             detach = true,
             on_exit = function(_, code)
                 if code ~= 0 then
-                    Snacks.notify.error("External terminal exited with code " .. code .. ".", { title = M.title })
+                    Snacks.notify.error('External terminal exited with code ' .. code .. '.', { title = M.title })
                 end
             end,
         })
         if job <= 0 then
-            Snacks.notify.error("Could not start the external terminal.", { title = M.title })
+            Snacks.notify.error('Could not start the external terminal.', { title = M.title })
         end
         return
     end
@@ -48,7 +48,7 @@ function M.run(task, cwd, mode)
     if terminal then
         terminal:close()
     end
-    local background = mode == "background"
+    local background = mode == 'background'
     options.interactive = not background
     options.win = { enter = not background }
     terminal = Snacks.terminal.open(command, options)
@@ -58,25 +58,25 @@ function M.run(task, cwd, mode)
 end
 
 function M.list(cwd, on_tasks)
-    if vim.fn.executable("mise") == 0 then
-        Snacks.notify.warn("mise is not installed or not on PATH.", { title = M.title })
+    if vim.fn.executable('mise') == 0 then
+        Snacks.notify.warn('mise is not installed or not on PATH.', { title = M.title })
         return
     end
 
-    vim.system({ "mise", "tasks", "--json" }, { cwd = cwd, text = true }, vim.schedule_wrap(function(result)
+    vim.system({ 'mise', 'tasks', '--json' }, { cwd = cwd, text = true }, vim.schedule_wrap(function(result)
         if result.code ~= 0 then
-            local message = vim.trim(result.stderr or "")
-            Snacks.notify.error(message ~= "" and message or "Could not list mise tasks.", { title = M.title })
+            local message = vim.trim(result.stderr or '')
+            Snacks.notify.error(message ~= '' and message or 'Could not list mise tasks.', { title = M.title })
             return
         end
 
         local valid, tasks = pcall(vim.json.decode, result.stdout)
-        if not valid or type(tasks) ~= "table" or not vim.islist(tasks) then
-            Snacks.notify.error("mise returned an invalid task list.", { title = M.title })
+        if not valid or type(tasks) ~= 'table' or not vim.islist(tasks) then
+            Snacks.notify.error('mise returned an invalid task list.', { title = M.title })
             return
         end
         if #tasks == 0 then
-            Snacks.notify.info("No mise tasks available in this directory.", { title = M.title })
+            Snacks.notify.info('No mise tasks available in this directory.', { title = M.title })
             return
         end
 

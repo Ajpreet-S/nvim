@@ -1,11 +1,11 @@
 return {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
     opts = {
-        preset = "helix",
+        preset = 'helix',
         spec = {
-            { "<leader>c", group = "Code", mode = { "n", "x" } },
-            { "<leader>d", group = "Diagnostics" },
+            { '<leader>c', group = 'Code', mode = { 'n', 'x' } },
+            { '<leader>d', group = 'Diagnostics' },
         },
     },
 }

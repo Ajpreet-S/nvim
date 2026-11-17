@@ -1,16 +1,16 @@
 local M = {}
-local modes = require("pickers.modes")
-local mise = require("tasks.mise")
+local modes = require('pickers.modes')
+local mise = require('tasks.mise')
 local launch_modes = {
-    { id = "neovim", label = "Neovim" },
-    { id = "background", label = "Background" },
-    { id = "external", label = "External" },
+    { id = 'neovim', label = 'Neovim' },
+    { id = 'background', label = 'Background' },
+    { id = 'external', label = 'External' },
 }
 
 function M.open()
     local cwd = vim.fn.getcwd()
     mise.list(cwd, function(tasks)
-        local launch_mode = "neovim"
+        local launch_mode = 'neovim'
         local function update_title(picker)
             modes.update_title(picker, launch_modes, launch_mode, mise.title)
         end
@@ -26,13 +26,13 @@ function M.open()
                     return {
                         { task.name },
                         {
-                            virt_text = { { " " .. task.description .. " ", "Comment" } },
-                            virt_text_pos = "right_align",
-                            hl_mode = "combine",
+                            virt_text = { { ' ' .. task.description .. ' ', 'Comment' } },
+                            virt_text_pos = 'right_align',
+                            hl_mode = 'combine',
                         },
                     }
                 end
-                return task.name .. (task.description ~= "" and (" — " .. task.description) or "")
+                return task.name .. (task.description ~= '' and (' — ' .. task.description) or '')
             end,
             snacks = {
                 on_show = update_title,
@@ -43,13 +43,13 @@ function M.open()
                 win = {
                     input = {
                         keys = {
-                            ["<Tab>"] = { "next_launch_mode", mode = "i", desc = "Next launch mode" },
-                            ["<S-Tab>"] = { "previous_launch_mode", mode = "i", desc = "Previous launch mode" },
+                            ['<Tab>'] = { 'next_launch_mode', mode = 'i', desc = 'Next launch mode' },
+                            ['<S-Tab>'] = { 'previous_launch_mode', mode = 'i', desc = 'Previous launch mode' },
                         },
                     },
                 },
                 layout = {
-                    preset = "select",
+                    preset = 'select',
                     layout = {
                         row = 0.15,
                         width = 65,

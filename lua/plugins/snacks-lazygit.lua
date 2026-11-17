@@ -1,8 +1,8 @@
 return {
-    "folke/snacks.nvim",
+    'folke/snacks.nvim',
     opts = {
         lazygit = {
-            win = { width = 0, height = 0, border = "none" },
+            win = { width = 0, height = 0, border = 'none' },
         },
     },
 }

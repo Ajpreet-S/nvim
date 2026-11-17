@@ -1,9 +1,9 @@
-local modes = require("pickers.modes")
+local modes = require('pickers.modes')
 -- Source IDs follow the order of the multi-source list.
 local search_modes = {
-    { id = "all", label = "All" },
-    { id = "files", label = "Files", source_id = 1 },
-    { id = "text", label = "Text", source_id = 2 },
+    { id = 'all', label = 'All' },
+    { id = 'files', label = 'Files', source_id = 1 },
+    { id = 'text', label = 'Text', source_id = 2 },
 }
 
 local function update_mode_title(picker)
@@ -18,15 +18,15 @@ local function cycle_search_mode(picker, direction)
 end
 
 return {
-    "folke/snacks.nvim",
+    'folke/snacks.nvim',
     opts = {
         picker = {
             enabled = true,
-            prompt = "   ",
+            prompt = '   ',
             sources = {
                 all = {
-                    title = "All",
-                    search_mode = "all",
+                    title = 'All',
+                    search_mode = 'all',
                     on_show = update_mode_title,
                     actions = {
                         next_search_mode = function(picker) cycle_search_mode(picker, 1) end,
@@ -35,15 +35,15 @@ return {
                     win = {
                         input = {
                             keys = {
-                                ["<Tab>"] = { "next_search_mode", mode = "i", desc = "Next search mode" },
-                                ["<S-Tab>"] = { "previous_search_mode", mode = "i", desc = "Previous search mode" },
+                                ['<Tab>'] = { 'next_search_mode', mode = 'i', desc = 'Next search mode' },
+                                ['<S-Tab>'] = { 'previous_search_mode', mode = 'i', desc = 'Previous search mode' },
                             },
                         },
-                        preview = { wo = { fillchars = "eob: ", wrap = false } },
+                        preview = { wo = { fillchars = 'eob: ', wrap = false } },
                     },
                     formatters = { file = { filename_first = true } },
                     format = function(item, picker)
-                        local display_item = vim.tbl_extend("force", {}, item)
+                        local display_item = vim.tbl_extend('force', {}, item)
                         display_item.pos = nil
                         if item.line then
                             display_item.file = nil
@@ -55,18 +55,18 @@ return {
                                 { cwd = picker:cwd() }
                             )
                             result[#result + 1] = {
-                                virt_text = { { " " .. path .. " ", "SnacksPickerDir" } },
-                                virt_text_pos = "right_align",
-                                hl_mode = "combine",
+                                virt_text = { { ' ' .. path .. ' ', 'SnacksPickerDir' } },
+                                virt_text_pos = 'right_align',
+                                hl_mode = 'combine',
                             }
                             return result
                         end
                         return Snacks.picker.format.file(display_item, picker)
                     end,
-                    multi = { "files", { source = "grep", regex = false } },
+                    multi = { 'files', { source = 'grep', regex = false } },
                     matcher = { frecency = true, sort_empty = true },
                     transform = function(item)
-                        item.label = item.pos and "󰈙 " or nil
+                        item.label = item.pos and '󰈙 ' or nil
                         if not item.pos then
                             item.score_mul = 2
                         end
@@ -81,19 +81,19 @@ return {
                         end,
                     },
                     layout = {
-                        preset = "vertical",
+                        preset = 'vertical',
                         layout = {
                             row = 0.08,
                             width = 0.65,
                             max_height = 30,
                             min_height = 20,
-                            title = "{title}",
+                            title = '{title}',
                         },
                         config = function(layout)
                             for _, box in ipairs(layout.layout) do
-                                if box.win == "list" then
+                                if box.win == 'list' then
                                     box.height = 7
-                                elseif box.win == "preview" then
+                                elseif box.win == 'preview' then
                                     box.height = nil -- Fill the space below the results.
                                 end
                             end
@@ -104,7 +104,7 @@ return {
             win = {
                 input = {
                     keys = {
-                        ["<Esc>"] = { "close", mode = { "n", "i" } },
+                        ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
                     },
                 },
             },

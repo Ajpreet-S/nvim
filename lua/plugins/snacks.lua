@@ -1,7 +1,7 @@
 return {
-    "folke/snacks.nvim",
+    'folke/snacks.nvim',
     dependencies = {
-        { "nvim-mini/mini.icons", opts = {} },
+        { 'nvim-mini/mini.icons', opts = {} },
     },
     priority = 1000,
     lazy = false,

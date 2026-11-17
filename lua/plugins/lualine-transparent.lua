@@ -3,15 +3,15 @@
 -- they are cleared on each theme it builds, which it does again on every
 -- colorscheme change. The mode and position sections keep their colours.
 return {
-	"nvim-lualine/lualine.nvim",
+	'nvim-lualine/lualine.nvim',
 	opts = function(_, opts)
 		opts.options = opts.options or {}
 		opts.options.theme = function()
-			local theme = require("lualine.utils.loader").load_theme("auto")
+			local theme = require('lualine.utils.loader').load_theme('auto')
 			for _, mode in pairs(theme) do
-				for _, section in ipairs({ "b", "c" }) do
+				for _, section in ipairs({ 'b', 'c' }) do
 					if mode[section] then
-						mode[section].bg = "None"
+						mode[section].bg = 'None'
 					end
 				end
 			end
