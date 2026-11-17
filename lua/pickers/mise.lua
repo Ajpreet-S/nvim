@@ -1,3 +1,4 @@
+local M = {}
 local modes = require("pickers.modes")
 local mise = require("tasks.mise")
 local launch_modes = {
@@ -6,7 +7,7 @@ local launch_modes = {
     { id = "external", label = "External" },
 }
 
-local function mise_tasks()
+function M.open()
     local cwd = vim.fn.getcwd()
     mise.list(cwd, function(tasks)
         local launch_mode = "neovim"
@@ -64,9 +65,4 @@ local function mise_tasks()
     end)
 end
 
-return {
-    "folke/snacks.nvim",
-    keys = {
-        { "<leader>m", mise_tasks, desc = mise.title, mode = "n" },
-    },
-}
+return M

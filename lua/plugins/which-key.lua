@@ -8,11 +8,4 @@ return {
             { "<leader>d", group = "Diagnostics" },
         },
     },
-    keys = {
-        {
-            "<leader>?",
-            function() require("which-key").show({ global = true }) end,
-            desc = "Show Keymaps",
-        },
-    },
 }
