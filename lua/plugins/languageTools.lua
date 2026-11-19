@@ -1,12 +1,5 @@
 return {
   {
-    'd2lang/d2-vim',
-    ft = 'd2',
-    init = function()
-      vim.g.d2_fmt_autosave = 0 -- Keep formatting manual through Conform.
-    end,
-  },
-  {
     'neovim/nvim-lspconfig',
     config = function()
       vim.lsp.config('lua_ls', {
@@ -14,13 +7,22 @@ return {
           Lua = { diagnostics = { globals = { 'vim' } } },
         },
       })
-      vim.lsp.enable({ 'lua_ls', 'html', 'cssls', 'ts_ls', 'eslint', 'bashls' })
+      vim.lsp.config('emmet_language_server', {
+        filetypes = { 'html', 'css' },
+      })
+      vim.lsp.config('intelephense', {
+        root_markers = { 'composer.json', '.git' },
+      })
+      vim.lsp.enable({ 'lua_ls', 'html', 'cssls', 'ts_ls', 'eslint', 'bashls', 'emmet_language_server', 'intelephense' })
     end,
   },
   {
     'saghen/blink.cmp',
     version = '1.*',
-    opts = {},
+    opts = {
+      completion = { documentation = { auto_show = true } },
+      signature = { enabled = true },
+    },
   },
   {
     'williamboman/mason.nvim',
@@ -34,21 +36,26 @@ return {
         'lua-language-server',
         'html-lsp',
         'css-lsp',
+        'emmet-language-server',
         'typescript-language-server',
         'eslint-lsp',
+        'prettier',
         'bash-language-server',
         'shellcheck',
         'shfmt',
+        'js-debug-adapter',
+        'bash-debug-adapter',
+        'php-debug-adapter',
+        'intelephense',
       }
     },
   },
   {
     'stevearc/conform.nvim',
-    lazy = true,
+    event = 'BufWritePre',
     opts = {
       formatters_by_ft = {
         lua = { 'stylua' },
-        d2 = { 'd2' },
         sh = { 'shfmt' },
         bash = { 'shfmt' },
         javascript = { 'prettier' },
@@ -62,7 +69,12 @@ return {
         jsonc = { 'prettier' },
         yaml = { 'prettier' },
       },
-      format_on_save = false,
+      format_on_save = function(bufnr)
+        local formatters = require('conform').formatters_by_ft[vim.bo[bufnr].filetype] or {}
+        if vim.tbl_contains(formatters, 'prettier') then
+          return { timeout_ms = 2000, lsp_format = 'never' }
+        end
+      end,
     },
   },
 }

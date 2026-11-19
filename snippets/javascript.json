@@ -1,0 +1,14 @@
+{
+    "console.log": {
+        "prefix": "cl",
+        "body": "console.log(${1:value});$0"
+    },
+    "arrow function": {
+        "prefix": "()y",
+        "body": [
+            "(${1:args}) => {",
+                "\t$0",
+                "};"
+        ]
+    }
+}

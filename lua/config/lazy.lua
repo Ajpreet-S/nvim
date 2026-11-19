@@ -15,10 +15,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Set leaders before loading plugins so their mappings use the right keys.
-vim.g.mapleader = ' '
-vim.g.maplocalleader = '\\'
-
 require('lazy').setup({
     spec = {
         { import = 'plugins' },

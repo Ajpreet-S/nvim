@@ -100,7 +100,8 @@ local dashboard = {
                     end)
                 end,
             },
-            { icon = ' ', key = 'c', desc = 'Config', action = ':lua Snacks.dashboard.pick(\'files\', {cwd = vim.fn.stdpath(\'config\')})' },
+            { icon = ' ', key = 'c', desc = 'Neovim Config', action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+            { icon = ' ', key = 'h', desc = 'Hyprland Config', action = ":lua Snacks.dashboard.pick('files', {cwd = '/home/aj/.config/hypr/'})" },
             { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
         }
     },
