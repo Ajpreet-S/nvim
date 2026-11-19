@@ -2,4 +2,5 @@
 return {
     '~/Work/codebase/',
     '~/Playground/Bunny/situs-interretialis/',
+    '~/.config/nvim/',
 }

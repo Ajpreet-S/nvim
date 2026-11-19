@@ -1,9 +1,10 @@
 local map = vim.keymap.set
 
 -- Editing
-map('i', 'jk', '<Esc>', { desc = 'Exit Insert Mode' })
-map('n', '<leader>s', '<Cmd>write<CR>', { desc = 'Save File' })
-map('n', '<leader>q', '<Cmd>quit<CR>', { desc = 'Quit Window' })
+map('i', 'jk', '<Esc>', { desc = 'exit insert mode' })
+map('n', '<leader>s', '<Cmd>write<CR>', { desc = 'save file' })
+map('n', '<leader>q', '<Cmd>quit<CR>', { desc = 'quit window' })
+map('n', '<leader><S-q>', '<Cmd>quit!<CR>', { desc = 'quit window without saving' })
 
 -- Files and search (Snacks is loaded at startup)
 map('n', '<leader>e', function() Snacks.explorer() end, { desc = 'File Explorer' })
@@ -68,4 +69,19 @@ map('n', '<C-\\>', function() require('dap').continue() end, { desc = 'DapContin
 map('n', "<C-'>", function() require('dap').step_over() end, { desc = 'DapStepOver' })
 map('n', "<C-;>", function() require('dap').step_into() end, { desc = 'DapStepInto' })
 map('n', "<C-S-;>", function() require('dap').step_out() end, { desc = 'DapStepOut' })
-map('n', '<leader>db', function() require('dap').toggle_breakpoint() end, { desc = 'Toggle Breakpoint' })
+map('n', '<C-b>', function() require('dap').toggle_breakpoint() end, { desc = 'Toggle Breakpoint' })
+
+-- Dashboard
+map('n', '<leader><S-d>', function()
+    for _, picker in ipairs(Snacks.picker.get()) do
+        picker:close()
+    end
+    vim.schedule(function()
+        vim.cmd('fclose!')
+        vim.cmd('silent only')
+        if vim.bo.filetype ~= 'snacks_dashboard' then
+            Snacks.dashboard({ win = 0 })
+        end
+    end)
+end, { desc = 'Dashboard' })
+map('n', '<leader><S-c>', function() Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')}) end, { desc = 'Neovim Config' })

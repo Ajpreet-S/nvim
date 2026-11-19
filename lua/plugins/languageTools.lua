@@ -19,7 +19,9 @@ return {
   {
     'saghen/blink.cmp',
     version = '1.*',
+    dependencies = { 'L3MON4D3/LuaSnip' },
     opts = {
+      snippets = { preset = 'luasnip' },
       completion = { documentation = { auto_show = true } },
       signature = { enabled = true },
     },

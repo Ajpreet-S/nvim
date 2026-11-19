@@ -85,7 +85,9 @@ local dashboard = {
     preset = {
         keys = {
             {
-                icon = ' ', key = 'p', desc = 'Projects',
+                icon = ' ',
+                key = 'p',
+                desc = 'Projects',
                 action = function()
                     Snacks.picker.select(require('config.projects'), {
                         prompt = 'Projects',
@@ -95,18 +97,23 @@ local dashboard = {
                     }, function(path)
                         if path then
                             vim.fn.chdir(vim.fn.expand(path))
+                            if vim.bo.filetype == 'snacks_dashboard' then
+                                vim.cmd('enew')
+                            end
                             Snacks.explorer({ cwd = vim.fn.getcwd() })
                         end
                     end)
                 end,
             },
+            -- MENU
             { icon = ' ', key = 'c', desc = 'Neovim Config', action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
             { icon = ' ', key = 'h', desc = 'Hyprland Config', action = ":lua Snacks.dashboard.pick('files', {cwd = '/home/aj/.config/hypr/'})" },
+            { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
             { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
         }
     },
     sections = {
-        { section = 'header', padding = 1 },
+        { section = 'header',                     padding = 1 },
         function()
             return {
                 text = { splash_text(), hl = 'header' },
@@ -116,7 +123,7 @@ local dashboard = {
             }
         end,
         { text = { attribution, hl = 'Comment' }, align = 'center', padding = 2, enabled = attribution ~= nil },
-        { section = 'keys', gap = 1, padding = 1 },
+        { section = 'keys',                       gap = 1,          padding = 1 },
     },
 }
 
