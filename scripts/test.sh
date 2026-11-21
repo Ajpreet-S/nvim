@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Open a Bash shell with the pushed config in a clean container: ./test.sh
+# Open a Bash shell with the pushed config in a clean container: ./scripts/test.sh
 set -euo pipefail
 
 repo="${NVIM_REPO:-https://github.com/Ajpreet-S/nvim.git}"
