@@ -6,6 +6,7 @@
 ## Tooling preference
 - Keep editor tooling low-bloat: favor a small set of tools and plugins, learn them well, and avoid unnecessary tool overlap and the mental overhead of excessive choices.
 - Prefer/Recommend Neovim defaults and hand-rolled extensions/plugins/etc in order to not only keep bloat to a minimum, but to learn core Neovim fundamentals.
+- Consider aligning keymaps to Vanilla NeoVim > Chrome or Chrome Dev Tools > JetBrains IDEs > VSCode. This is to build transferrable muscle memory.
 
 ## Lua style
 - Use single-quoted strings.
