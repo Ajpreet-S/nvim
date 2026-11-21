@@ -3,6 +3,7 @@
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.autoread = true
+vim.opt.undofile = true -- Keep undo history after saving and reopening files.
 vim.opt.scrolloff = 8
 vim.opt.wrap = false
 

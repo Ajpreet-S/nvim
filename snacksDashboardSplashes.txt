@@ -3,5 +3,4 @@
 -- rare_skip_chance in lua/plugins/snacksDashboard.lua controls the chance of excluding all rare splashes.
 .In nomine Patris, et Filii, et Spiritus Sancti | Venator
 .I WANNA PLAY WITH RABIES RONNIE!!! | Rem
-Hello World!
-WRITE PSUEDOCODE BEFORE IMPLEMENTATION!!!!!
+Write psuedocode before implementation.
