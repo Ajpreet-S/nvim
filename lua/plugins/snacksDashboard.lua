@@ -78,38 +78,70 @@ local function animate_splash()
 end
 
 
+local function harpoon_section()
+    local list = require('harpoon'):list()
+    local keys = { 'j', 'k', 'l', ';' }
+    local names = {}
+    for _, item in pairs(list.items) do
+        local name = vim.fn.fnamemodify(item.value, ':t')
+        names[name] = (names[name] or 0) + 1
+    end
+
+    local section = {
+        title = 'pinned files · ' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':t'),
+        padding = 1,
+    }
+    for slot = 1, list:length() do
+        local item = list.items[slot]
+        if item and item.value ~= '' then
+            local name = vim.fn.fnamemodify(item.value, ':t')
+            name = names[name] > 1 and item.value or name
+            local hint = keys[slot] and ('[Alt-' .. keys[slot] .. '] ') or ''
+            local index = slot
+            section[#section + 1] = {
+                desc = hint .. name,
+                action = function() list:select(index) end,
+            }
+        end
+    end
+    return #section > 0 and section or nil
+end
+
 -- CONFIG HERE!
 local dashboard = {
     enabled = true,
-    width = 50,
+    width = 33,
     preset = {
         keys = {
             {
-                icon = ' ',
+                icon = '',
                 key = 'p',
                 desc = 'Projects',
                 action = function()
-                    Snacks.picker.select(require('config.projects'), {
-                        prompt = 'Projects',
-                        snacks = {
-                            layout = { preset = 'select', layout = { row = 0.15 } },
-                        },
-                    }, function(path)
-                        if path then
-                            vim.fn.chdir(vim.fn.expand(path))
-                            if vim.bo.filetype == 'snacks_dashboard' then
-                                vim.cmd('enew')
-                            end
-                            Snacks.explorer({ cwd = vim.fn.getcwd() })
-                        end
-                    end)
+                    Snacks.picker.projects({
+                        -- A list-only finder avoids scanning directories or adding recent projects.
+                        finder = function()
+                            return vim.tbl_map(function(path)
+                                path = vim.fs.normalize(vim.fn.expand(path))
+                                return { file = path, text = path, dir = true }
+                            end, require('config.projects'))
+                        end,
+                        confirm = { 'tcd', 'picker_explorer' },
+                    })
                 end,
             },
-            -- MENU
-            { icon = ' ', key = 'c', desc = 'Neovim Config', action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-            { icon = ' ', key = 'h', desc = 'Hyprland Config', action = ":lua Snacks.dashboard.pick('files', {cwd = '/home/aj/.config/hypr/'})" },
-            { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
-            { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
+            {
+                icon = '󰆓',
+                key = 's',
+                desc = 'Sessions',
+                action = function() require('config.sessions').select() end,
+            },
+            {
+                icon = '',
+                key = 'r',
+                desc = 'Recents',
+                action = function() Snacks.picker.recent() end,
+            },
         }
     },
     sections = {
@@ -124,6 +156,7 @@ local dashboard = {
         end,
         { text = { attribution, hl = 'Comment' }, align = 'center', padding = 2, enabled = attribution ~= nil },
         { section = 'keys',                       gap = 1,          padding = 1 },
+        harpoon_section,
     },
 }
 

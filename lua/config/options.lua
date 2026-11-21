@@ -6,6 +6,9 @@ vim.opt.autoread = true
 vim.opt.scrolloff = 8
 vim.opt.wrap = false
 
+-- Restore editing layouts, not help windows, terminals, or empty dashboard panes.
+vim.opt.sessionoptions = { 'buffers', 'curdir', 'folds', 'tabpages', 'winsize' }
+
 -- Default indentation; override per language in after/ftplugin/<filetype>.lua.
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4

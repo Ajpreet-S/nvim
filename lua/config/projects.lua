@@ -1,6 +1,5 @@
 -- Explicit project directories. Add or remove paths here, then restart Neovim.
 return {
     '~/Work/codebase/',
-    '~/Playground/Bunny/situs-interretialis/',
-    '~/.config/nvim/',
+    '~/Work/chromiumExtension2/',
 }

@@ -5,7 +5,22 @@ return {
             {
                 'igorlfs/nvim-dap-view',
                 version = '1.*',
-                opts = {},
+                opts = {
+                    windows = {
+                        position = 'right',
+                        size = 40,
+                    },
+                    winbar = {
+                        sections = { 'repl', 'watches', 'scopes', 'threads' },
+                        show_keymap_hints = false,
+                        base_sections = {
+                            repl = { label = '[R]EPL' },
+                            watches = { label = '[W]atch' },
+                            scopes = { label = '[S]cope' },
+                            threads = { label = '[T]hreads' },
+                        },
+                    },
+                },
             },
         },
         config = function()
@@ -22,6 +37,8 @@ return {
                 },
             }
 
+            dap.adapters['pwa-chrome'] = dap.adapters['pwa-node']
+
             dap.configurations['javascript'] = {
                 {
                     name = 'Launch current file',
@@ -30,6 +47,16 @@ return {
                     program = '${file}',
                     cwd = '${workspaceFolder}',
                 },
+                {
+                    name = 'Attach to Chromium',
+                    type = 'pwa-chrome',
+                    request = 'attach',
+                    address = '127.0.0.1',
+                    port = 9222,
+                    urlFilter = 'http://localhost:8080/*',
+                    webRoot = '${workspaceFolder}/optic-systems-legacy',
+                    sourceMaps = true,
+                }
             }
 
             -- BASH

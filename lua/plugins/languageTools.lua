@@ -4,7 +4,7 @@ return {
     config = function()
       vim.lsp.config('lua_ls', {
         settings = {
-          Lua = { diagnostics = { globals = { 'vim' } } },
+          Lua = { diagnostics = { globals = { 'vim', 'Snacks' } } },
         },
       })
       vim.lsp.config('emmet_language_server', {
@@ -19,9 +19,7 @@ return {
   {
     'saghen/blink.cmp',
     version = '1.*',
-    dependencies = { 'L3MON4D3/LuaSnip' },
     opts = {
-      snippets = { preset = 'luasnip' },
       completion = { documentation = { auto_show = true } },
       signature = { enabled = true },
     },

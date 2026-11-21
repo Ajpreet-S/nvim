@@ -1,5 +1,8 @@
 # AGENTS.md
 
+## Agent workflow
+- Before configuring, debugging, reviewing, or improving this Neovim setup, read `/home/aj/.pi/agent/skills/neovim-config/SKILL.md` and follow it. Include this requirement in relevant subagent briefs when delegation is authorized.
+
 ## Tooling preference
 - Keep editor tooling low-bloat: favor a small set of tools and plugins, learn them well, and avoid unnecessary tool overlap and the mental overhead of excessive choices.
 - Prefer/Recommend Neovim defaults and hand-rolled extensions/plugins/etc in order to not only keep bloat to a minimum, but to learn core Neovim fundamentals.

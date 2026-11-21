@@ -3,7 +3,11 @@ local limit = 5
 local function add_file()
     local list = require('harpoon'):list()
     local item = list.config.create_list_item(list.config)
-    if not item or item.value == '' or list:get_by_value(item.value) then
+    if not item or item.value == '' then
+        return
+    end
+    if list:get_by_value(item.value) then
+        Snacks.notify.info('Already pinned: ' .. item.value, { title = 'Harpoon' })
         return
     end
     if vim.tbl_count(list.items) >= limit then
@@ -13,6 +17,7 @@ local function add_file()
         return
     end
     list:add(item)
+    Snacks.notify.info('Pinned: ' .. item.value, { title = 'Harpoon' })
 end
 
 return {

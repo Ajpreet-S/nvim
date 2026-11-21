@@ -6,6 +6,7 @@ return {
 	'nvim-lualine/lualine.nvim',
 	opts = function(_, opts)
 		opts.options = opts.options or {}
+		opts.options.globalstatus = true
 		opts.options.theme = function()
 			local theme = require('lualine.utils.loader').load_theme('auto')
 			for _, mode in pairs(theme) do

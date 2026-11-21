@@ -7,8 +7,9 @@ local search_modes = {
 }
 
 local function update_mode_title(picker)
-    picker.title = modes.get(search_modes, picker.opts.search_mode).label
-    modes.update_title(picker, search_modes, picker.opts.search_mode)
+    local matching = picker.opts.search_regex and 'Regex' or 'Fuzzy Files / Literal Text'
+    picker.title = matching .. ' · ' .. modes.get(search_modes, picker.opts.search_mode).label
+    modes.update_title(picker, search_modes, picker.opts.search_mode, matching)
 end
 
 local function cycle_search_mode(picker, direction)
@@ -25,16 +26,23 @@ return {
             prompt = '   ',
             sources = {
                 all = {
-                    title = 'All',
+                    title = 'Regex · All',
                     search_mode = 'all',
+                    search_regex = true,
                     on_show = update_mode_title,
                     actions = {
                         next_search_mode = function(picker) cycle_search_mode(picker, 1) end,
                         previous_search_mode = function(picker) cycle_search_mode(picker, -1) end,
+                        toggle_search_matching = function(picker)
+                            picker.opts.search_regex = not picker.opts.search_regex
+                            update_mode_title(picker)
+                            picker:find()
+                        end,
                     },
                     win = {
                         input = {
                             keys = {
+                                ['<a-r>'] = { 'toggle_search_matching', mode = { 'i', 'n' }, desc = 'Toggle regex / fuzzy files + literal text' },
                                 ['<Tab>'] = { 'next_search_mode', mode = 'i', desc = 'Next search mode' },
                                 ['<S-Tab>'] = { 'previous_search_mode', mode = 'i', desc = 'Previous search mode' },
                             },
@@ -63,7 +71,22 @@ return {
                         end
                         return Snacks.picker.format.file(display_item, picker)
                     end,
-                    multi = { 'files', { source = 'grep', regex = false } },
+                    multi = {
+                        {
+                            source = 'files',
+                            finder = function(opts, ctx)
+                                return require('pickers.search_files').find(opts, ctx)
+                            end,
+                        },
+                        {
+                            source = 'grep',
+                            args = { '--no-config', '--engine=default' },
+                            finder = function(opts, ctx)
+                                opts = vim.tbl_extend('force', {}, opts, { regex = opts.search_regex })
+                                return require('snacks.picker.source.grep').grep(opts, ctx)
+                            end,
+                        },
+                    },
                     matcher = { frecency = true, sort_empty = true },
                     transform = function(item)
                         item.label = item.pos and '󰈙 ' or nil
@@ -76,8 +99,8 @@ return {
                     filter = {
                         transform = function(picker, filter)
                             filter.source_id = modes.get(search_modes, picker.opts.search_mode).source_id
-                            -- Match file names with the same query used for text search.
-                            filter.pattern = filter.search
+                            -- Each source handles its own matching; do not filter text results again.
+                            filter.pattern = ''
                         end,
                     },
                     layout = {

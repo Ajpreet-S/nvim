@@ -1,87 +1,68 @@
+-- some aliases to make things easier to read and configure
+-- Prefer <Cmd> for Ex commands; use : when a Visual range is required.
 local map = vim.keymap.set
+local n = 'n'
+local i = 'i'
+local harpoon = require('harpoon')
 
--- Editing
-map('i', 'jk', '<Esc>', { desc = 'exit insert mode' })
-map('n', '<leader>s', '<Cmd>write<CR>', { desc = 'save file' })
-map('n', '<leader>q', '<Cmd>quit<CR>', { desc = 'quit window' })
-map('n', '<leader><S-q>', '<Cmd>quit!<CR>', { desc = 'quit window without saving' })
+-- keymap helper
+map(n, '<leader>?', function() require('which-key').show({ global = true }) end, { desc = 'show keymaps' })
 
--- Files and search (Snacks is loaded at startup)
-map('n', '<leader>e', function() Snacks.explorer() end, { desc = 'File Explorer' })
-map('n', '<leader>f', function() Snacks.picker.pick('all') end, { desc = 'Search All' })
+-- settings
+map(n, '<C-M-s>', function() Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config') }) end, { desc = 'neovim config' })
+map(n, '<leader>R', function()
+    package.loaded['config.options'] = nil
+    package.loaded['config.keymaps'] = nil
+    vim.cmd.source(vim.fn.stdpath('config') .. '/init.lua')
+    vim.notify('Reloaded options and keymaps; restart Neovim for plugin changes')
+end, { desc = 'reload config (options and keymaps)' })
 
--- Focus
-map('n', '<leader>z', function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
-map('n', '<leader>Z', function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
+-- editing
+map(i, 'jk', '<Esc>', { desc = 'exit insert mode' })
+map(n, '<Esc>', '<Cmd>nohlsearch<CR>', { desc = 'clear search highlights' })
+map(n, '<leader>s', '<Cmd>write<CR>', { desc = '[s]ave file' })
+map(n, '<leader>S', function() require('config.sessions').enroll() end, { desc = 'save project session (automatic updates)' })
+map(n, '<leader>q', '<Cmd>quit<CR>', { desc = '[q]uit window' })
+map(n, '<leader><S-q>', '<Cmd>quit!<CR>', { desc = '[Q]uit window without saving' })
+map(i, '<M-s>', function() require('blink.cmp').show({ providers = { 'snippets' } }) end, { desc = 'browse snippets' })
+map({ n, 'x' }, '<leader>cf', function() require('conform').format({ async = true, lsp_format = 'fallback' }) end, { desc = 'format code' })
 
--- Bookmarks (require inside callbacks lets Lazy load Harpoon on demand)
-map('n', '<leader>h', function() require('harpoon').add_file() end, { desc = 'Harpoon Add File' })
-map('n', '<leader>H', function()
-    local harpoon = require('harpoon')
-    harpoon.ui:toggle_quick_menu(harpoon:list())
-end, { desc = 'Harpoon Bookmarks' })
-map('n', '<leader>j', function() require('harpoon'):list():select(1) end, { desc = 'Harpoon File 1' })
-map('n', '<leader>k', function() require('harpoon'):list():select(2) end, { desc = 'Harpoon File 2' })
-map('n', '<leader>l', function() require('harpoon'):list():select(3) end, { desc = 'Harpoon File 3' })
-map('n', '<leader>;', function() require('harpoon'):list():select(4) end, { desc = 'Harpoon File 4' })
-map('n', '<leader>\'', function() require('harpoon'):list():select(5) end, { desc = 'Harpoon File 5' })
+-- file explorer and searching
+map(n, '<leader>e', function() Snacks.explorer() end, { desc = 'file [e]xplorer' })
+map(n, '<leader>f', function() Snacks.picker.pick('all') end, { desc = '[f]ind stuff' })
 
--- Git and tasks
-map('n', '<leader>g', function() Snacks.lazygit() end, { desc = 'LazyGit' })
-map('n', '<leader>m', function() require('pickers.mise').open() end, { desc = 'Mise Tasks' })
+-- file navigation via Harpoon
+map(n, '<S-m>', function() harpoon.add_file() end, { desc = '[M]ark a file (harpoon)' })
+map(n, '<M-m>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = '[Alt]er [m]arked file list (harpoon)' })
+map(n, '<M-j>', function() harpoon:list():select(1) end, { desc = 'file 1 (harpoon)' })
+map(n, '<M-k>', function() harpoon:list():select(2) end, { desc = 'file 2 (harpoon)' })
+map(n, '<M-l>', function() harpoon:list():select(3) end, { desc = 'file 3 (harpoon)' })
+map(n, '<M-;>', function() harpoon:list():select(4) end, { desc = 'file 4 (harpoon)' })
 
--- Code
-map('i', '<C-j>', 'copilot#Accept("\\<CR>")', {
-    expr = true,
-    replace_keycodes = false,
-    desc = 'Accept Copilot Suggestion',
-})
-map('i', '<M-s>', function()
-    require('blink.cmp').show({ providers = { 'snippets' } })
-end, { desc = 'Browse Snippets' })
-map({ 'n', 'x' }, '<leader>cf', function()
-    require('conform').format({ async = true, lsp_format = 'fallback' })
-end, { desc = 'Format Code' })
-
--- LSP shortcuts apply only to buffers with an attached language server.
+-- Custom LSP, linter, formatter actions
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('LanguageKeymaps', { clear = true }),
     callback = function(event)
         local function lsp_map(lhs, rhs, desc)
-            map('n', lhs, rhs, { buffer = event.buf, desc = desc })
+            map(n, lhs, rhs, { buffer = event.buf, desc = desc })
         end
-        lsp_map('gd', vim.lsp.buf.definition, 'Go to Definition')
-        lsp_map('gD', vim.lsp.buf.declaration, 'Go to Declaration')
-        lsp_map('grr', function() Snacks.picker.lsp_references() end, 'Find References')
-        lsp_map('<leader>cs', vim.lsp.buf.signature_help, 'Signature Help')
+        -- Use native Ctrl-] for definitions and insert-mode Ctrl-s for signatures.
+        lsp_map('grr', function() Snacks.picker.lsp_references() end, 'find references')
     end,
 })
+map(n, '<leader>d', vim.diagnostic.setloclist, { desc = 'buffer diagnostics' })
 
--- Diagnostics
-map('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Buffer Diagnostics' })
-map('n', '<leader>dw', vim.diagnostic.setqflist, { desc = 'Workspace Diagnostics' })
+-- tools (mise, lazygit, debugger UI, agent)
+map(n, '<M-t>', function() require('pickers.mise').open() end, { desc = 'mise tasks' })
+map(n, '<M-g>', function() Snacks.lazygit() end, { desc = 'lazygit' })
+map(n, '<M-d>', function() require('dap-view').toggle(true) end, { desc = 'toggle debugger ui' })
+map(n, '<M-a>', '<Cmd>CodeCompanionChat Toggle<CR>', { desc = 'toggle agent chat' })
+-- tools > debugger
+map(n, '<C-b>', function() require('dap').toggle_breakpoint() end, { desc = 'toggle breakpoint' })
+map(n, '<C-\\>', function() require('dap').continue() end, { desc = 'debug start / continue' })
+map(n, "<C-'>", function() require('dap').step_over() end, { desc = 'debug step over' })
+map(n, "<C-;>", function() require('dap').step_into() end, { desc = 'debug step into' })
+map(n, "<C-S-;>", function() require('dap').step_out() end, { desc = 'debug step out' })
+-- tools > agent
+map('x', '<M-a>', ':CodeCompanionChat Add<CR>', { desc = 'add selection to agent chat' })
 
--- Discover mappings
-map('n', '<leader>?', function() require('which-key').show({ global = true }) end, { desc = 'Show Keymaps' })
-
--- Debugging
-map('n', '<C-\\>', function() require('dap').continue() end, { desc = 'DapContinue' })
-map('n', "<C-'>", function() require('dap').step_over() end, { desc = 'DapStepOver' })
-map('n', "<C-;>", function() require('dap').step_into() end, { desc = 'DapStepInto' })
-map('n', "<C-S-;>", function() require('dap').step_out() end, { desc = 'DapStepOut' })
-map('n', '<C-b>', function() require('dap').toggle_breakpoint() end, { desc = 'Toggle Breakpoint' })
-
--- Dashboard
-map('n', '<leader><S-d>', function()
-    for _, picker in ipairs(Snacks.picker.get()) do
-        picker:close()
-    end
-    vim.schedule(function()
-        vim.cmd('fclose!')
-        vim.cmd('silent only')
-        if vim.bo.filetype ~= 'snacks_dashboard' then
-            Snacks.dashboard({ win = 0 })
-        end
-    end)
-end, { desc = 'Dashboard' })
-map('n', '<leader><S-c>', function() Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')}) end, { desc = 'Neovim Config' })
