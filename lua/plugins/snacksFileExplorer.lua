@@ -10,6 +10,10 @@ return {
         explorer = {
           hidden = true,
           ignored = false,
+          win = {
+            input = { keys = { ['<a-h>'] = false } },
+            list = { keys = { ['<a-h>'] = false } },
+          },
           on_show = function(picker)
             -- Snacks counts a full-width main preview's resize as a
             -- sidebar resize on first open. Give the overlay its real
@@ -28,7 +32,6 @@ return {
           layout = {
             preset = 'sidebar',
             preview = 'main',
-            layout = { width = 35, min_width = 35 },
           },
         },
       },

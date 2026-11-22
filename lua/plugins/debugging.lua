@@ -7,8 +7,7 @@ return {
         version = '1.*',
         opts = {
           windows = {
-            position = 'right',
-            size = 40,
+            position = 'below',
           },
           winbar = {
             sections = { 'repl', 'watches', 'scopes', 'threads' },

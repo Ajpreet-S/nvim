@@ -13,11 +13,17 @@ return {
   opts = {
     display = {
       chat = {
-        window = { layout = 'vertical', position = 'right', width = 70 },
+        window = { layout = 'vertical', position = 'right' },
       },
     },
     interactions = {
-      chat = { adapter = 'codex' },
+      chat = {
+        adapter = 'codex',
+        keymaps = {
+          scroll_chat_down = { modes = { n = '<M-n>', i = '<M-n>' } },
+          scroll_chat_up = { modes = { n = '<M-p>', i = '<M-p>' } },
+        },
+      },
     },
     adapters = {
       acp = {
