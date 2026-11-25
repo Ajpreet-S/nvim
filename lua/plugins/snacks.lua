@@ -3,6 +3,9 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
+    dim = {
+      animate = { enabled = false },
+    },
     scroll = {
       enabled = true,
       animate = { duration = { step = 8, total = 120 } },

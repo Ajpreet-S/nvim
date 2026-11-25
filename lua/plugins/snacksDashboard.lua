@@ -95,7 +95,7 @@ local function harpoon_section()
     if item and item.value ~= '' then
       local name = vim.fn.fnamemodify(item.value, ':t')
       name = names[name] > 1 and item.value or name
-      local hint = keys[slot] and ('[Alt-' .. keys[slot] .. '] ') or ''
+      local hint = keys[slot] and ('[space-' .. keys[slot] .. '] ') or ''
       local index = slot
       section[#section + 1] = {
         desc = hint .. name,

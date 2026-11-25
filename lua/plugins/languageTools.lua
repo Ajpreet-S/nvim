@@ -32,7 +32,10 @@ return {
       vim.lsp.config('intelephense', {
         root_markers = { 'composer.json', '.git' },
       })
-      vim.lsp.enable({ 'lua_ls', 'html', 'cssls', 'ts_ls', 'eslint', 'bashls', 'emmet_language_server', 'intelephense' })
+      vim.lsp.config('bashls', {
+        settings = { bashIde = { shellcheckPath = '' } },
+      })
+      vim.lsp.enable({ 'lua_ls', 'html', 'cssls', 'ts_ls', 'bashls', 'emmet_language_server', 'intelephense' })
     end,
   },
   {
@@ -72,7 +75,7 @@ return {
   },
   {
     'stevearc/conform.nvim',
-    event = 'BufWritePre',
+    cmd = 'ConformInfo',
     opts = {
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -89,12 +92,6 @@ return {
         jsonc = { 'prettier' },
         yaml = { 'prettier' },
       },
-      format_on_save = function(bufnr)
-        local formatters = require('conform').formatters_by_ft[vim.bo[bufnr].filetype] or {}
-        if vim.tbl_contains(formatters, 'prettier') then
-          return { timeout_ms = 2000, lsp_format = 'never' }
-        end
-      end,
     },
   },
 }

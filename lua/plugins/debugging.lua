@@ -5,6 +5,13 @@ return {
       {
         'igorlfs/nvim-dap-view',
         version = '1.*',
+        init = function()
+          vim.api.nvim_create_autocmd('FileType', {
+            group = vim.api.nvim_create_augroup('DapViewPanelLayout', { clear = true }),
+            pattern = 'dap-view',
+            callback = function() require('config.panel_layout').arrange() end,
+          })
+        end,
         opts = {
           windows = {
             position = 'below',
@@ -97,6 +104,15 @@ return {
           port = 9003,
           pathMappings = {
             ['/var/www/html'] = '/home/aj/Work/codebase/optic-systems-v2',
+          },
+        },
+        {
+          name = 'Listen for Xdebug (MODX)',
+          type = 'php',
+          request = 'launch',
+          port = 9003,
+          pathMappings = {
+            ['/var/www/html'] = '/home/aj/Work/codebase/optic-systems-legacy',
           },
         },
       }

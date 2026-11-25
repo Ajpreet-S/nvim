@@ -3,4 +3,6 @@
 -- rare_skip_chance in lua/plugins/snacksDashboard.lua controls the chance of excluding all rare splashes.
 .In nomine Patris, et Filii, et Spiritus Sancti | Venator
 .I WANNA PLAY WITH RABIES RONNIE!!! | Rem
-Write psuedocode before implementation.
+Write psuedocode before implementation!
+Focus on the core functionlity first, then worry about the UI. Good code makes changing UI easy.
+One small change at a time. Commit often. Write good commit messages. It forces you to think about what you are doing and why. It also makes it easier to roll back changes if something goes wrong.
